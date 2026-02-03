@@ -24,7 +24,7 @@
             position: relative;
         }
 
-        /* Candy decorations */
+        /* Interactive background layer */
         body::before {
             content: '';
             position: fixed;
@@ -32,13 +32,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: 
-                radial-circle(circle at 20% 80%, #d6e8b5 0%, transparent 50%),
-                radial-circle(circle at 80% 20%, #ffffff 0%, transparent 50%),
-                radial-circle(circle at 40% 40%, #d6e8b5 0%, transparent 50%);
-            opacity: 0.3;
             pointer-events: none;
             z-index: 0;
+            background: radial-gradient(circle 400px at 50% 50%, rgba(214, 232, 181, 0.5), transparent);
+            transition: background 0.3s ease;
         }
 
         .container {
@@ -47,12 +44,15 @@
             box-shadow: 
                 0 8px 0 #d6a0a6,
                 0 16px 30px rgba(0,0,0,0.2);
-            max-width: 1400px;
+            max-width: 650px;
             width: 100%;
-            overflow: hidden;
+            overflow: visible;
             position: relative;
             z-index: 1;
             border: 4px solid #fec3ca;
+            max-height: 95vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .header {
@@ -74,14 +74,13 @@
 
         .main-content {
             display: flex;
+            flex-direction: column;
             gap: 20px;
-            padding: 20px;
-            min-height: 600px;
+            padding: 25px;
             background: #fff8f9;
         }
 
         .camera-section {
-            flex: 1;
             display: flex;
             flex-direction: column;
             gap: 15px;
@@ -115,6 +114,9 @@
             background: #000;
             border-radius: 25px;
             overflow: hidden;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
             aspect-ratio: 4/3;
             display: flex;
             align-items: center;
@@ -323,12 +325,14 @@
         }
 
         .sticker-panel {
-            width: 300px;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
             background: #fff8f9;
             border-radius: 25px;
             padding: 20px;
             overflow-y: auto;
-            max-height: 600px;
+            max-height: 350px;
             border: 4px solid #d6e8b5;
             box-shadow: 
                 0 6px 0 #b8ca97,
@@ -336,16 +340,16 @@
         }
 
         .sticker-panel h3 {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             color: #fec3ca;
             font-family: 'Fredoka One', cursive;
             text-shadow: 2px 2px 0 #d6e8b5;
-            font-size: 1.5em;
+            font-size: 1.4em;
         }
 
         .sticker-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 10px;
         }
 
@@ -406,6 +410,7 @@
             right: -30px;
             display: flex;
             gap: 5px;
+            z-index: 10;
         }
 
         .sticker-control-btn {
@@ -437,6 +442,11 @@
             color: white;
         }
 
+        .rotate-sticker {
+            background: #d6e8b5;
+            color: #5a7a3c;
+        }
+
         .resize-handle {
             position: absolute;
             bottom: -10px;
@@ -454,25 +464,108 @@
 
         .strip-preview {
             background: #fff8f9;
-            padding: 40px;
+            padding: 20px;
             border-radius: 25px;
             display: none;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
+            width: 100%;
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
         .strip-preview.active {
             display: flex;
         }
 
+        .strip-preview h2 {
+            margin-bottom: 0;
+            font-size: 1.8em;
+        }
+
+        .strip-main-content {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 800px;
+            align-items: flex-start;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .strip-container {
+            position: relative;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
         #stripCanvas {
-            border: 5px solid #fec3ca;
-            border-radius: 20px;
-            max-width: 100%;
+            border: 4px solid #fec3ca;
+            border-radius: 15px;
+            width: 200px;
+            height: auto;
+            display: block;
             box-shadow: 
-                0 10px 0 #d6a0a6,
-                0 20px 40px rgba(0,0,0,0.2);
+                0 8px 0 #d6a0a6,
+                0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        #stripStickerContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        #stripStickerContainer .sticker-overlay {
+            pointer-events: auto;
+        }
+
+        .strip-sticker-panel {
+            width: 100%;
+            max-width: 320px;
+            flex: 1;
+            min-width: 280px;
+            background: white;
+            border-radius: 20px;
+            padding: 15px;
+            overflow-y: auto;
+            max-height: 450px;
+            border: 4px solid #d6e8b5;
+            box-shadow: 
+                0 5px 0 #b8ca97,
+                0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .strip-sticker-panel h3 {
+            margin-bottom: 8px;
+            color: #fec3ca;
+            font-family: 'Fredoka One', cursive;
+            text-shadow: 2px 2px 0 #d6e8b5;
+            font-size: 1.2em;
+        }
+
+        .strip-sticker-panel p {
+            font-size: 0.9em;
+        }
+
+        .strip-controls {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            max-width: 540px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .strip-controls button {
+            flex: 1;
+            min-width: 200px;
+            max-width: 220px;
         }
 
         .hidden {
@@ -540,22 +633,30 @@
         }
 
         @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
+            .container {
+                max-width: 100%;
+                max-height: 100vh;
             }
 
-            .sticker-panel {
-                width: 100%;
-                max-height: 400px;
-                order: 2;
+            .main-content {
+                padding: 20px;
             }
 
             .camera-section {
                 order: 1;
             }
 
+            .header {
+                flex-shrink: 0;
+            }
+
             .header h1 {
                 font-size: 2em;
+            }
+
+            .start-screen {
+                flex: 1;
+                overflow-y: auto;
             }
 
             .start-screen h2 {
@@ -575,28 +676,90 @@
                 overflow-x: auto;
                 justify-content: flex-start;
                 padding-bottom: 10px;
+                gap: 8px;
             }
 
             .filter-btn {
                 flex-shrink: 0;
+                padding: 8px 20px;
+                font-size: 0.9em;
             }
 
             .controls {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .controls button {
-                width: 100%;
+                gap: 10px;
             }
 
             .sticker-grid {
                 grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+            }
+
+            .sticker-panel {
+                max-height: 280px;
+                padding: 15px;
+            }
+
+            .sticker-panel h3 {
+                font-size: 1.2em;
             }
 
             .photo-count {
                 font-size: 1em;
                 padding: 12px 20px;
+            }
+
+            .strip-preview {
+                padding: 15px 15px 20px 15px;
+                gap: 12px;
+            }
+
+            .strip-preview h2 {
+                font-size: 1.4em;
+                margin-bottom: 5px;
+                flex-shrink: 0;
+            }
+
+            .strip-main-content {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+                width: 100%;
+            }
+
+            #stripCanvas {
+                border-width: 3px;
+                width: 200px;
+            }
+
+            .strip-sticker-panel {
+                max-width: 100%;
+                min-width: 100%;
+                max-height: 250px;
+                padding: 12px;
+            }
+
+            .strip-sticker-panel h3 {
+                font-size: 1.1em;
+                margin-bottom: 6px;
+            }
+
+            .strip-sticker-panel p {
+                font-size: 0.85em;
+                margin-bottom: 10px;
+            }
+
+            .strip-controls {
+                flex-direction: row;
+                max-width: 100%;
+                gap: 8px;
+                flex-shrink: 0;
+                width: 100%;
+            }
+
+            .strip-controls button {
+                min-width: 0;
+                max-width: 100%;
+                flex: 1;
             }
         }
 
@@ -607,6 +770,8 @@
 
             .container {
                 border-radius: 20px;
+                border-width: 3px;
+                max-height: 100vh;
             }
 
             .header {
@@ -614,7 +779,7 @@
             }
 
             .header h1 {
-                font-size: 1.5em;
+                font-size: 1.6em;
             }
 
             .main-content {
@@ -627,43 +792,189 @@
             }
 
             .start-screen h2 {
-                font-size: 1.6em;
+                font-size: 1.5em;
+            }
+
+            .start-screen p {
+                font-size: 1em;
             }
 
             .cute-hearts {
                 font-size: 30px;
+                gap: 15px;
+            }
+
+            button {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+
+            .filter-btn {
+                padding: 6px 15px;
+                font-size: 0.85em;
+            }
+
+            .sticker-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .sticker-panel {
+                max-height: 240px;
+                padding: 12px;
+            }
+
+            .sticker-item {
+                padding: 8px;
+            }
+
+            .photo-count {
+                font-size: 0.9em;
+                padding: 10px 18px;
+            }
+
+            .camera-container {
+                border-width: 3px;
+            }
+
+            .countdown {
+                font-size: 80px;
             }
 
             .strip-preview {
-                padding: 20px;
+                padding: 10px 10px 15px 10px;
+                gap: 10px;
+            }
+
+            .strip-preview h2 {
+                font-size: 1.2em;
+                margin-bottom: 3px;
+            }
+
+            .strip-main-content {
+                gap: 12px;
             }
 
             #stripCanvas {
-                max-width: 100%;
-                height: auto;
+                width: 160px;
+                border-width: 2px;
+            }
+
+            .strip-sticker-panel {
+                padding: 10px;
+                max-height: 200px;
+                border-width: 3px;
+            }
+
+            .strip-sticker-panel h3 {
+                font-size: 1em;
+                margin-bottom: 5px;
+            }
+
+            .strip-sticker-panel p {
+                font-size: 0.75em;
+                margin-bottom: 8px;
+            }
+
+            .sticker-grid {
+                gap: 6px;
+            }
+
+            .strip-controls {
+                gap: 6px;
+                flex-shrink: 0;
+                width: 100%;
+            }
+
+            .strip-controls button {
+                padding: 10px 15px;
+                font-size: 0.85em;
             }
         }
+            .header {
+        position: relative;
+    }
+
+        .camera-lens {
+            position: absolute;
+            right: 28px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #2f2f2f;
+            border: 3px solid #ffcfd5;
+            box-shadow:
+                inset 0 0 6px rgba(255,255,255,0.25),
+                inset 0 -6px 8px rgba(0,0,0,0.45),
+                0 4px 10px rgba(0,0,0,0.25);
+        }
+
+        /* Inner lens glass */
+        .camera-lens::before {
+            content: '';
+            position: absolute;
+            inset: 5px;
+            border-radius: 50%;
+            background: radial-gradient(
+                circle at 30% 30%,
+                rgba(255,255,255,0.35),
+                rgba(0,0,0,0.85) 70%
+            );
+        }
+
+        /* Reflection dot */
+        .lens-shine {
+            position: absolute;
+            top: 7px;
+            left: 9px;
+            width: 5px;
+            height: 5px;
+            background: rgba(255,255,255,0.85);
+            border-radius: 50%;
+        }
+        .camera-lens {
+    background: radial-gradient(circle at 30% 30%, #444, #111);
+}
+
+
 
         /* Landscape mode on mobile */
         @media (max-height: 600px) and (orientation: landscape) {
             .camera-container {
                 aspect-ratio: 16/9;
-            }
-
-            .main-content {
-                min-height: auto;
+                max-width: 500px;
             }
 
             .start-screen {
                 padding: 30px 20px;
             }
+
+            .cute-hearts {
+                margin-bottom: 15px;
+            }
+
+            .sticker-panel {
+                max-height: 200px;
+            }
         }
+        @media (max-width: 480px) {
+    .camera-lens {
+        right: 16px;
+        width: 30px;
+        height: 30px;
+    }
+}
+
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>Cute Photobooth</h1>
+            <div class="camera-lens">
+                <span class="lens-shine"></span>
+            </div>
         </div>
 
         <div class="start-screen" id="startScreen">
@@ -692,7 +1003,6 @@
                     <video id="video" autoplay playsinline></video>
                     <canvas id="canvas"></canvas>
                     <div class="flash" id="flash"></div>
-                    <div id="stickerContainer"></div>
                 </div>
 
                 <div class="controls">
@@ -710,32 +1020,25 @@
                     </button>
                 </div>
             </div>
-
-            <div class="sticker-panel">
-                <h3>Add Stickers</h3>
-                <p style="color: #5a7a3c; font-size: 0.9em; margin-bottom: 15px; font-weight: 600;">
-                    Click to add, drag to move, use handle to resize
-                </p>
-                <div class="sticker-grid" id="stickerGrid">
-                </div>
-            </div>
         </div>
 
         <div class="strip-preview" id="stripPreview">
             <h2 style="color: #fec3ca; font-family: 'Fredoka One', cursive; text-shadow: 3px 3px 0 #d6e8b5;">Your Photo Strip!</h2>
-            <div class="strip-container" style="position: relative; display: inline-block;">
-                <canvas id="stripCanvas"></canvas>
-                <div id="stripStickerContainer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
-            </div>
-            <div class="sticker-panel" style="max-height: 300px; width: 100%; max-width: 500px;">
-                <h3>Customize Your Strip</h3>
-                <p style="color: #5a7a3c; font-size: 0.9em; margin-bottom: 15px; font-weight: 600;">
-                    Add stickers to your photo strip!
-                </p>
-                <div class="sticker-grid" id="stripStickerGrid">
+            <div class="strip-main-content">
+                <div class="strip-container">
+                    <canvas id="stripCanvas"></canvas>
+                    <div id="stripStickerContainer"></div>
+                </div>
+                <div class="strip-sticker-panel">
+                    <h3>Customize Your Strip</h3>
+                    <p style="color: #5a7a3c; font-size: 0.9em; margin-bottom: 15px; font-weight: 600;">
+                        Click to add, drag to move, rotate and resize!
+                    </p>
+                    <div class="sticker-grid" id="stripStickerGrid">
+                    </div>
                 </div>
             </div>
-            <div class="controls">
+            <div class="strip-controls">
                 <button class="btn-primary" onclick="downloadStripWithStickers()">
                     Download Strip
                 </button>
@@ -756,46 +1059,28 @@
         let activeSticker = null;
         let stripStickerCounter = 0;
 
-        // ========================================
-        // IMPORTANT: ADD YOUR PINTEREST STICKER URLS HERE!
-        // ========================================
-        // Replace these placeholder URLs with your downloaded Pinterest stickers
-        // You can add as many stickers as you want!
+        
         const stickerUrls = [
-            // Example format:
-            // 'path/to/your/sticker1.png',
-            // 'path/to/your/sticker2.png',
-            // Or if hosted online:
-            // 'https://example.com/sticker1.png',
             
-            // Placeholder stickers (replace these with your own):
-            'stickers/bow.png', // heart
-            'stickers/bunny.png', // star
-            'stickers/camera.png', // sunglasses
-            'stickers/disco.png', // crown
-            'stickers/flower.png', // smile
-            'stickers/headphone.png', // kiss
-            'stickers/sony.png', // sparkle
-            'stickers/star_sticker.png', // fire
-            'https://cdn-icons-png.flaticon.com/512/3468/3468071.png', // confetti
+            
+            'stickers/bow.png', 
+            'stickers/bunny.png', 
+            'stickers/camera.png', 
+            'stickers/disco.png', 
+            'stickers/flower.png', 
+            'stickers/headphone.png', 
+            'stickers/jelly.png', 
+            'stickers/sony.png', 
+            'stickers/Star_Sticker.png',
         ];
 
         // Initialize sticker grids
         function loadStickers() {
-            const grid = document.getElementById('stickerGrid');
             const stripGrid = document.getElementById('stripStickerGrid');
-            grid.innerHTML = '';
             stripGrid.innerHTML = '';
             
             stickerUrls.forEach((url, index) => {
-                // Camera stickers
-                const item = document.createElement('div');
-                item.className = 'sticker-item';
-                item.innerHTML = `<img src="${url}" alt="Sticker ${index + 1}">`;
-                item.onclick = () => addSticker(url);
-                grid.appendChild(item);
-
-                // Strip stickers
+                // Strip stickers only
                 const stripItem = document.createElement('div');
                 stripItem.className = 'sticker-item';
                 stripItem.innerHTML = `<img src="${url}" alt="Sticker ${index + 1}">`;
@@ -872,23 +1157,52 @@
             }, 1000);
         }
 
-        // Capture photo
+        // Capture photo - FIXED FOR MOBILE 4:3 RATIO
         function capturePhoto() {
             const video = document.getElementById('video');
             const canvas = document.getElementById('canvas');
             const flash = document.getElementById('flash');
             const ctx = canvas.getContext('2d');
             
-            // Set canvas size
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
+            // Desired photobooth aspect ratio (4:3)
+            const targetRatio = 4 / 3;
+            const videoWidth = video.videoWidth;
+            const videoHeight = video.videoHeight;
+            const videoRatio = videoWidth / videoHeight;
+            
+            // Set canvas to fixed 4:3 ratio (high quality)
+            const canvasWidth = 1200;
+            const canvasHeight = 900;
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
             
             // Flash effect
             flash.classList.add('active');
             setTimeout(() => flash.classList.remove('active'), 300);
             
-            // Draw video frame
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            // Calculate crop area to maintain 4:3 ratio
+            let sx, sy, sw, sh;
+            
+            if (videoRatio > targetRatio) {
+                // Video too wide → crop sides
+                sh = videoHeight;
+                sw = sh * targetRatio;
+                sx = (videoWidth - sw) / 2;
+                sy = 0;
+            } else {
+                // Video too tall (MOBILE CASE) → crop top & bottom
+                sw = videoWidth;
+                sh = sw / targetRatio;
+                sx = 0;
+                sy = (videoHeight - sh) / 2;
+            }
+            
+            // Draw cropped video to canvas at fixed 4:3 size
+            ctx.drawImage(
+                video,
+                sx, sy, sw, sh,
+                0, 0, canvasWidth, canvasHeight
+            );
             
             // Apply filter to canvas
             if (currentFilter !== 'none') {
@@ -896,34 +1210,6 @@
                 applyCanvasFilter(imageData, currentFilter);
                 ctx.putImageData(imageData, 0, 0);
             }
-            
-            // Draw stickers onto canvas
-            const stickers = document.querySelectorAll('.sticker-overlay');
-            stickers.forEach(sticker => {
-                const img = sticker.querySelector('img');
-                const rect = sticker.getBoundingClientRect();
-                const containerRect = document.getElementById('cameraContainer').getBoundingClientRect();
-                
-                // Calculate position and size relative to canvas
-                const scaleX = canvas.width / containerRect.width;
-                const scaleY = canvas.height / containerRect.height;
-                
-                const x = (rect.left - containerRect.left) * scaleX;
-                const y = (rect.top - containerRect.top) * scaleY;
-                const width = rect.width * scaleX;
-                const height = rect.height * scaleY;
-                
-                // Get rotation
-                const transform = sticker.style.transform;
-                const rotateMatch = transform.match(/rotate\(([^)]+)\)/);
-                const rotation = rotateMatch ? parseFloat(rotateMatch[1]) : 0;
-                
-                ctx.save();
-                ctx.translate(x + width/2, y + height/2);
-                ctx.rotate(rotation * Math.PI / 180);
-                ctx.drawImage(img, -width/2, -height/2, width, height);
-                ctx.restore();
-            });
             
             // Save photo
             photos[currentPhotoIndex] = {
@@ -944,9 +1230,6 @@
             } else {
                 document.getElementById('finishBtn').classList.remove('hidden');
             }
-            
-            // Clear stickers
-            document.getElementById('stickerContainer').innerHTML = '';
         }
 
         // Apply filter to canvas image data
@@ -1056,7 +1339,11 @@
         function makeDraggable(element) {
             let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
             
+            // Mouse events
             element.onmousedown = dragMouseDown;
+            
+            // Touch events for mobile
+            element.ontouchstart = dragTouchStart;
             
             function dragMouseDown(e) {
                 if (e.target.classList.contains('resize-handle') || 
@@ -1069,6 +1356,21 @@
                 pos4 = e.clientY;
                 document.onmouseup = closeDragElement;
                 document.onmousemove = elementDrag;
+                activeSticker = element;
+            }
+            
+            function dragTouchStart(e) {
+                if (e.target.classList.contains('resize-handle') || 
+                    e.target.classList.contains('sticker-control-btn')) {
+                    return;
+                }
+                
+                e.preventDefault();
+                const touch = e.touches[0];
+                pos3 = touch.clientX;
+                pos4 = touch.clientY;
+                document.ontouchend = closeDragElement;
+                document.ontouchmove = elementTouchDrag;
                 activeSticker = element;
             }
             
@@ -1091,9 +1393,31 @@
                 element.style.transform = `rotate(${rotation})`;
             }
             
+            function elementTouchDrag(e) {
+                e.preventDefault();
+                const touch = e.touches[0];
+                pos1 = pos3 - touch.clientX;
+                pos2 = pos4 - touch.clientY;
+                pos3 = touch.clientX;
+                pos4 = touch.clientY;
+                
+                const currentTransform = element.style.transform;
+                const rotateMatch = currentTransform.match(/rotate\(([^)]+)\)/);
+                const rotation = rotateMatch ? rotateMatch[1] : '0deg';
+                
+                const newTop = (element.offsetTop - pos2);
+                const newLeft = (element.offsetLeft - pos1);
+                
+                element.style.top = newTop + "px";
+                element.style.left = newLeft + "px";
+                element.style.transform = `rotate(${rotation})`;
+            }
+            
             function closeDragElement() {
                 document.onmouseup = null;
                 document.onmousemove = null;
+                document.ontouchend = null;
+                document.ontouchmove = null;
             }
         }
 
@@ -1101,6 +1425,7 @@
         function makeResizable(element) {
             const resizeHandle = element.querySelector('.resize-handle');
             
+            // Mouse events
             resizeHandle.onmousedown = function(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -1128,6 +1453,37 @@
                 document.addEventListener('mousemove', resize);
                 document.addEventListener('mouseup', stopResize);
             };
+            
+            // Touch events for mobile
+            resizeHandle.ontouchstart = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const touch = e.touches[0];
+                const startX = touch.clientX;
+                const startY = touch.clientY;
+                const startWidth = element.offsetWidth;
+                const startHeight = element.offsetHeight;
+                
+                function resizeTouch(e) {
+                    const touch = e.touches[0];
+                    const deltaX = touch.clientX - startX;
+                    const deltaY = touch.clientY - startY;
+                    const delta = Math.max(deltaX, deltaY);
+                    
+                    const newSize = Math.max(30, startWidth + delta);
+                    element.style.width = newSize + 'px';
+                    element.style.height = newSize + 'px';
+                }
+                
+                function stopResizeTouch() {
+                    document.removeEventListener('touchmove', resizeTouch);
+                    document.removeEventListener('touchend', stopResizeTouch);
+                }
+                
+                document.addEventListener('touchmove', resizeTouch);
+                document.addEventListener('touchend', stopResizeTouch);
+            };
         }
 
         // Delete sticker
@@ -1135,7 +1491,22 @@
             document.getElementById(id).remove();
         }
 
-        // Finish and create strip
+        // Rotate sticker by 45 degrees
+        function rotateSticker(id) {
+            const sticker = document.getElementById(id);
+            if (!sticker) return;
+            
+            let currentRotation = parseInt(sticker.dataset.rotation) || 0;
+            currentRotation = (currentRotation + 45) % 360;
+            sticker.dataset.rotation = currentRotation;
+            
+            const currentTransform = sticker.style.transform;
+            const translateMatch = currentTransform.match(/translate\([^)]+\)/);
+            const translatePart = translateMatch ? translateMatch[0] : 'translate(-50%, -50%)';
+            
+            sticker.style.transform = `${translatePart} rotate(${currentRotation}deg)`;
+        }
+
         function finishStrip() {
             if (stream) {
                 stream.getTracks().forEach(track => track.stop());
@@ -1147,12 +1518,10 @@
             createPhotoStrip();
         }
 
-        // Create photo strip
         function createPhotoStrip() {
             const stripCanvas = document.getElementById('stripCanvas');
             const ctx = stripCanvas.getContext('2d');
             
-            // Strip dimensions (2x6 inch at 300 DPI)
             const dpi = 300;
             const stripWidth = 2 * dpi;  // 600px
             const stripHeight = 6 * dpi; // 1800px
@@ -1166,7 +1535,7 @@
             ctx.fillStyle = 'white';
             ctx.fillRect(0, 0, stripWidth, stripHeight);
             
-            // Calculate photo dimensions
+            // Calculate photo dimensions (4:3 ratio)
             const photoWidth = stripWidth - (2 * border);
             const photoHeight = (stripHeight - (2 * border) - (3 * photoPadding)) / 4;
             
@@ -1177,10 +1546,10 @@
                     const img = new Image();
                     img.onload = function() {
                         const y = border + (index * (photoHeight + photoPadding));
+                        
                         ctx.drawImage(img, border, y, photoWidth, photoHeight);
                         loadedPhotos++;
                         
-                        // Add date/time stamp after all photos are loaded
                         if (loadedPhotos === photos.length) {
                             ctx.fillStyle = '#5a7a3c';
                             ctx.font = 'bold 18px Poppins';
@@ -1209,10 +1578,12 @@
             stickerDiv.style.left = '50%';
             stickerDiv.style.top = '50%';
             stickerDiv.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+            stickerDiv.dataset.rotation = '0';
             
             stickerDiv.innerHTML = `
                 <img src="${url}" draggable="false">
                 <div class="sticker-controls">
+                    <button class="sticker-control-btn rotate-sticker" onclick="rotateSticker('${stickerDiv.id}')">↻</button>
                     <button class="sticker-control-btn delete-sticker" onclick="deleteSticker('${stickerDiv.id}')">✕</button>
                 </div>
                 <div class="resize-handle"></div>
@@ -1284,7 +1655,6 @@
             });
         }
 
-        // Download strip (legacy function, redirects to new one)
         function downloadStrip() {
             downloadStripWithStickers();
         }
@@ -1313,6 +1683,33 @@
                     startCountdown();
                 }
             }
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            const x = e.clientX;
+            const y = e.clientY;
+            
+            document.body.style.background = `
+                radial-gradient(circle 600px at ${x}px ${y}px, #d6e8b5, transparent 60%),
+                radial-gradient(circle 800px at ${x}px ${y}px, rgba(255, 255, 255, 0.3), transparent 70%),
+                #fec3ca
+            `;
+        });
+
+        document.addEventListener('touchmove', function(e) {
+            const touch = e.touches[0];
+            const x = touch.clientX;
+            const y = touch.clientY;
+            
+            document.body.style.background = `
+                radial-gradient(circle 500px at ${x}px ${y}px, #d6e8b5, transparent 60%),
+                radial-gradient(circle 700px at ${x}px ${y}px, rgba(255, 255, 255, 0.3), transparent 70%),
+                #fec3ca
+            `;
+        });
+
+        document.addEventListener('mouseleave', function() {
+            document.body.style.background = '#fec3ca';
         });
     </script>
 </body>
